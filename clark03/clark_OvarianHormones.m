@@ -39,6 +39,6 @@ function [E2,P4,P4del,IH,IHdel] = clark_OvarianHormones(x,lag_sol,pars)
       IHdel=h_0+h_1*ylag1(7)+h_2*ylag1(12)+h_3*ylag1(13);
 
       ylag2 = lag_sol(:,2);
-      P4del= p_1*ylag2(12)+p_2*ylag2(13);
+      P4del= p_1*ylag2(12)+p_2*ylag2(13)+p_dose;
 
 end
