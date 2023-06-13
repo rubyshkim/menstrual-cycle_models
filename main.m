@@ -1,7 +1,7 @@
 % main.m
 % computes solutions and plots them against data
 
-clear; close all;
+clear; %close all;
 
 %% Specify which model. (Optional: also specify which data to use.)
 % paramfile = "wright_pars.xlsx";
@@ -11,10 +11,10 @@ clear; close all;
 % numCycles = 2; % how many cycles to simulate
 
 % paramfile = "clark_pars.xlsx";
-% datafile = "McLachlanData.xlsx";
+% % datafile = "McLachlanData.xlsx";
 % modelsolver = @clark_solve;
 % modellabel = "Harris Clark et al., 2003";
-% numCycles = 2; % how many cycles to simulate
+% numCycles = 1; % how many cycles to simulate
 
 % paramfile = "gavina_pars.xlsx";
 % datafile  = "WeltData.xlsx";
@@ -52,26 +52,29 @@ SOLS{s.p4} = sols(vars_i.p4,:);
 %% make figure
 
 N = length(s.variableNames);
-figure('Position', [0 300 ceil(N/2)*500 ceil(N/2)*500]); tstart=T(1); tend=T(end);
+figure('Position', [0 300 ceil(N/2)*500 ceil(N/2)*500]); 
+tstart=T(1); tend=T(end);
+
+% labels for subplots
+letters = ('a':'z').';
+char = num2cell(letters(1:N));
+char = char';
+char = strcat('(',char,')');
 
 % if no datafile, plot only model solutions
 % else, plot solutions with data
 if ~exist('datafile','var')
     % make figure
     for i=1:N
-        subplot(1,N,i); plot(T,SOLS{i},'DisplayName',cell2mat(s.variableNames(i)),'Color','k','LineWidth',2); hold on;
+        subplot(ceil(N/2),ceil(N/2),i); plot(T,SOLS{i},'DisplayName',cell2mat(s.variableNames(i)),'Color','k','LineWidth',2); hold on;
         legend; xlim([tstart tend]);
+        text(0.025,0.95,char{i},'Units','normalized','Interpreter','latex');
     end
 else
     rmse = zeros(1,N);
 
     % read data
     [TIME,DATA,SEM] = readData(s.variableNames,datafile);
-
-    letters = ('a':'z').';
-    char = num2cell(letters(1:N));
-    char = char';
-    char = strcat('(',char,')');
 
     % make figure
     for i=1:N
@@ -82,6 +85,7 @@ else
         end
 
         plot(T,SOLS{i},'DisplayName',cell2mat(s.variableNames(i)),'Color','k','LineWidth',2); hold on;
+
         xlim([tstart tend]); ylim([0 inf]);
         xlabel('Time (days)','Interpreter','latex');
         ylabel(cell2mat(s.variableNames(i)),'Interpreter','latex');

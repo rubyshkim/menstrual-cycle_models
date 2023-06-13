@@ -23,8 +23,8 @@ sols = deval(sol,tstart:dt:tend);
 tspan = tspan(end-29*3/dt:end);
 sols = sols(:,end-29*3/dt:end);
 
-% find LH peaks
-[~,locs] = findpeaks(sols(vars_i.lh,:),'MinPeakProminence',20);
+% find LH peaks with min peak prominence 0.2 of max concentration
+[~,locs] = findpeaks(sols(vars_i.lh,:),'MinPeakProminence',0.2*max(sols(vars_i.lh,:)));
 
 % compute period
 try
